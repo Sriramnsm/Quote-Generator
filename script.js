@@ -5,26 +5,31 @@ const twitterBtn = document.getElementById('twitter');
 const newQuoteBtn = document.getElementById('new-quote');
 const loader = document.getElementById('lds-roller');
 // const loader = document.getElementById('loader');
+let errorCount = 0;
 
 
 let apiQuotes = []; // We use let instead of Const because we will change it's value and we should use const only if we're never going to change the value
 
-// Show Loading
-
-function loading() {
+function showLoadingSpinner() {
     loader.hidden = false;
     quoteContainer.hidden = true;
 }
 
-// Hide Loading
-function complete() {
+function hideLoadingSpinner() {
     quoteContainer.hidden = false;
     loader.hidden = true;
 }
 
+// Show Modal Dialog Box
+
+function overlay() {
+	el = document.getElementById("overlay");
+	el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+}
+
 // Show New Quote
 function newQuote(){
-    loading();
+    showLoadingSpinner();
     // Pick a random quote from apiQuotes Array
     const quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)];
     
@@ -42,19 +47,25 @@ function newQuote(){
     }
     // Set Quote, Hide Loader
     quoteText.textContent = quote.text;
-    complete();
+    hideLoadingSpinner();
 }
 
 // Get Quotes From API
 async function getQuotes() {
-    loading();
+    showLoadingSpinner();
     const apiUrl = 'https://type.fit/api/quotes';
     try {
         const response = await fetch(apiUrl);
         apiQuotes = await response.json();
         newQuote();
     } catch (error) {
-        // Catc Error here
+        // Catch Error here
+        console.log(error);
+        errorCount++;
+        if(errorCount<11){getQuotes();}
+        else{
+            alert("We're sorry, but we encountered an unexpected problem downloading one or more components and can't run the Quote Generator right now...Please try again later");
+        }
         
     }
 }
@@ -66,7 +77,6 @@ function tweetQuote(){
 }
 
 // Event Listeners
-
 newQuoteBtn.addEventListener('click', newQuote);
 twitterBtn.addEventListener('click', tweetQuote);
 
