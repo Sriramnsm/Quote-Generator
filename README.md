@@ -1,5 +1,5 @@
 # Quote-Generator :black_nib:
- This is built using Pure Javascript and a twitter API for sharing the quote onto your twitter feed.
+ This is a random quote generator built using Pure Javascript and a twitter API for sharing the quote onto your twitter feed.
 
 ## How-To
 1. Click on the link below to go to the application.
